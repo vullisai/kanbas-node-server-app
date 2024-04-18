@@ -14,12 +14,7 @@ const CONNECTION_STRING = process.env.DB_CONNECTION_STRING || 'mongodb://127.0.0
 mongoose.connect(CONNECTION_STRING);
 
 const app = express()
-app.use(cors(
-    {
-    origin: process.env.FRONTEND_URL,
-    credentials: true,
-}
-));
+
 const sessionOptions = {
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -33,7 +28,14 @@ if (process.env.NODE_ENV !== "development") {
     domain: process.env.HTTP_SERVER_DOMAIN,
   };
 }
+
 app.use(session(sessionOptions)); 
+app.use(cors(
+  {
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+}
+));
 app.use(express.json());
 UserRoutes(app);
 CourseRoutes(app);
